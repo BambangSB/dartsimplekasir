@@ -89,99 +89,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     }
   }
 
-  void _showQrisDialog(double amount, String storeName) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.red.shade50,
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: Colors.red.shade200),
-              ),
-              child: const Text(
-                'QRIS STANDAR PEMBAYARAN',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                  letterSpacing: 1.0,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              storeName.toUpperCase(),
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey.shade300, width: 2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.qr_code_2_rounded,
-                    size: 180,
-                    color: Colors.grey.shade900,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    CurrencyFormat.toRupiah(amount),
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.deepOrange,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Silakan minta pelanggan scan kode QR ini menggunakan BCA, Mandiri, BRI, GoPay, OVO, DANA, atau aplikasi e-wallet lainnya.',
-              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-        actions: [
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              style: FilledButton.styleFrom(
-                backgroundColor: Colors.deepOrange,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('Tutup QR Code'),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showSuccessDialog(TransactionModel transaction) {
     final settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
 
@@ -616,7 +523,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ] else ...[
                     // Tampilan Non-Tunai / QRIS
                     Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(14),
@@ -629,80 +536,32 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           ),
                         ],
                       ),
-                      child: Column(
+                      child: Row(
                         children: [
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.deepOrange.shade50,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: const Icon(Icons.qr_code_scanner, color: Colors.deepOrange, size: 28),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Pembayaran QRIS / Non-Tunai',
-                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      'Nominal Pas: ${CurrencyFormat.toRupiah(totalAmount)}',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.deepOrange.shade800,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 14),
-                          const Divider(),
-                          const SizedBox(height: 10),
-                          SizedBox(
-                            width: double.infinity,
-                            child: OutlinedButton.icon(
-                              onPressed: () {
-                                final storeName = Provider.of<SettingsProvider>(context, listen: false).storeName;
-                                _showQrisDialog(totalAmount, storeName);
-                              },
-                              icon: const Icon(Icons.qr_code_2, color: Colors.deepOrange),
-                              label: const Text(
-                                'Tampilkan Kode QRIS Toko',
-                                style: TextStyle(color: Colors.deepOrange, fontWeight: FontWeight.bold),
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                side: const BorderSide(color: Colors.deepOrange),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Colors.amber.shade50,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: Colors.amber.shade200),
+                              color: Colors.deepOrange.shade50,
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Row(
+                            child: const Icon(Icons.qr_code_scanner, color: Colors.deepOrange, size: 30),
+                          ),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(Icons.info_outline, color: Colors.amber.shade900, size: 18),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    'Pastikan notifikasi dana masuk telah diterima di m-banking / e-wallet toko Anda sebelum menyelesaikan transaksi.',
-                                    style: TextStyle(fontSize: 12, color: Colors.amber.shade900, height: 1.3),
+                                const Text(
+                                  'Pembayaran Non-Tunai / QRIS',
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Total Tagihan: ${CurrencyFormat.toRupiah(totalAmount)}',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.deepOrange.shade800,
                                   ),
                                 ),
                               ],
