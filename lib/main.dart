@@ -4,7 +4,7 @@ import 'providers/cart_provider.dart';
 import 'providers/menu_provider.dart';
 import 'providers/settings_provider.dart';
 import 'providers/transaction_provider.dart';
-import 'screens/home_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +24,7 @@ class SimpleKasirApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TransactionProvider()..fetchTransactions()),
       ],
       child: MaterialApp(
-        title: 'Simple Kasir UMKM',
+        title: 'Kasir UMKM',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,
@@ -40,7 +40,7 @@ class SimpleKasirApp extends StatelessWidget {
             foregroundColor: Colors.white,
           ),
         ),
-        home: const HomeScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

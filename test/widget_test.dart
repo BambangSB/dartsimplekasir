@@ -4,6 +4,7 @@ import 'package:simple_kasir/main.dart';
 void main() {
   testWidgets('App smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(const SimpleKasirApp());
-    expect(find.text('Simple Kasir UMKM'), findsWidgets);
+    expect(find.text('Kasir UMKM'), findsWidgets);
+    await tester.pumpAndSettle(const Duration(seconds: 3));
   });
 }
