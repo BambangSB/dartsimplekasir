@@ -145,9 +145,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
               const SizedBox(height: 8),
 
               // Rincian Pembayaran
+              _buildReceiptRow('Metode Pembayaran', transaction.paymentMethod == 'QRIS' ? 'QRIS / Non-Tunai' : 'Tunai'),
               _buildReceiptRow('Total Tagihan', CurrencyFormat.toRupiah(transaction.totalAmount), isBold: true),
-              _buildReceiptRow('Uang Diterima', CurrencyFormat.toRupiah(transaction.cashReceived)),
-              _buildReceiptRow('Kembalian', CurrencyFormat.toRupiah(transaction.changeAmount)),
+              if (transaction.paymentMethod == 'Tunai') ...[
+                _buildReceiptRow('Uang Diterima', CurrencyFormat.toRupiah(transaction.cashReceived)),
+                _buildReceiptRow('Kembalian', CurrencyFormat.toRupiah(transaction.changeAmount)),
+              ] else ...[
+                _buildReceiptRow('Status', 'LUNAS (QRIS)'),
+              ],
 
               const SizedBox(height: 24),
 
@@ -342,9 +347,33 @@ class _HistoryScreenState extends State<HistoryScreen> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  trx.invoiceNumber,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      trx.invoiceNumber,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                    ),
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: trx.paymentMethod == 'QRIS' ? Colors.blue.shade50 : Colors.green.shade50,
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
+                          color: trx.paymentMethod == 'QRIS' ? Colors.blue.shade200 : Colors.green.shade200,
+                        ),
+                      ),
+                      child: Text(
+                        trx.paymentMethod,
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: trx.paymentMethod == 'QRIS' ? Colors.blue.shade700 : Colors.green.shade700,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Text(
                   CurrencyFormat.toRupiah(trx.totalAmount),
@@ -583,6 +612,96 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 ],
               ),
             ),
+          ),
+          const SizedBox(height: 12),
+
+          // Breakdown Omzet Tunai vs QRIS
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.green.shade200),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.payments_outlined, size: 16, color: Colors.green.shade700),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              'Tunai (${report.cashTransactions} Trx)',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.green.shade900,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        CurrencyFormat.toRupiah(report.cashRevenue),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green.shade900,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.blue.shade200),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.qr_code_2, size: 16, color: Colors.blue.shade700),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              'QRIS (${report.qrisTransactions} Trx)',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.blue.shade900,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        CurrencyFormat.toRupiah(report.qrisRevenue),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue.shade900,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 12),
 

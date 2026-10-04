@@ -67,5 +67,42 @@ void main() {
       expect(report.totalRevenue, 70000); // 25000 + 30000 + 15000
       expect(report.totalItemsSold, 11);
     });
+
+    test('Separates Tunai and QRIS sales metrics properly', () {
+      final mixedTransactions = [
+        TransactionModel(
+          invoiceNumber: 'TRX-CASH-1',
+          dateTime: DateTime(2026, 10, 5, 10, 0),
+          totalAmount: 20000,
+          cashReceived: 50000,
+          changeAmount: 30000,
+          paymentMethod: 'Tunai',
+          items: [
+            CartItem(item: MenuItem(name: 'Nasi Goreng', price: 20000), quantity: 1),
+          ],
+        ),
+        TransactionModel(
+          invoiceNumber: 'TRX-QRIS-1',
+          dateTime: DateTime(2026, 10, 5, 11, 0),
+          totalAmount: 35000,
+          cashReceived: 35000,
+          changeAmount: 0,
+          paymentMethod: 'QRIS',
+          items: [
+            CartItem(item: MenuItem(name: 'Ayam Bakar', price: 35000), quantity: 1),
+          ],
+        ),
+      ];
+
+      final start = DateTime(2026, 10, 5);
+      final end = DateTime(2026, 10, 5);
+      final report = SalesReport.fromTransactions(mixedTransactions, start, end);
+
+      expect(report.totalRevenue, 55000);
+      expect(report.cashRevenue, 20000);
+      expect(report.cashTransactions, 1);
+      expect(report.qrisRevenue, 35000);
+      expect(report.qrisTransactions, 1);
+    });
   });
 }

@@ -23,6 +23,8 @@ class ReportShareHelper {
     buffer.writeln('📅 Periode: $periodeStr');
     buffer.writeln('━━━━━━━━━━━━━━━━━━━━');
     buffer.writeln('💰 *Total Omzet*: ${CurrencyFormat.toRupiah(report.totalRevenue)}');
+    buffer.writeln('💵 *Tunai*: ${CurrencyFormat.toRupiah(report.cashRevenue)} (${report.cashTransactions} Trx)');
+    buffer.writeln('📱 *QRIS / Non-Tunai*: ${CurrencyFormat.toRupiah(report.qrisRevenue)} (${report.qrisTransactions} Trx)');
     buffer.writeln('🧾 *Total Transaksi*: ${report.totalTransactions} Transaksi');
     buffer.writeln('📦 *Item Terjual*: ${report.totalItemsSold} Porsi/Item');
     buffer.writeln('📈 *Rata-rata/Trx*: ${CurrencyFormat.toRupiah(report.averageOrderValue)}');
@@ -39,7 +41,7 @@ class ReportShareHelper {
       buffer.writeln('\n_Belum ada penjualan pada periode ini_');
     }
 
-    buffer.writeln('\n_Dicatat otomatis via Simple Kasir UMKM_');
+    buffer.writeln('\n_Dicatat otomatis via Kasir UMKM_');
     return buffer.toString();
   }
 
@@ -74,6 +76,10 @@ class ReportShareHelper {
     // Ringkasan
     buffer.writeln('RINGKASAN');
     buffer.writeln('Total Omzet,${report.totalRevenue}');
+    buffer.writeln('Total Omzet Tunai,${report.cashRevenue}');
+    buffer.writeln('Transaksi Tunai,${report.cashTransactions}');
+    buffer.writeln('Total Omzet QRIS,${report.qrisRevenue}');
+    buffer.writeln('Transaksi QRIS,${report.qrisTransactions}');
     buffer.writeln('Total Transaksi,${report.totalTransactions}');
     buffer.writeln('Total Item Terjual,${report.totalItemsSold}');
     buffer.writeln('Rata-rata Transaksi,${report.averageOrderValue.round()}');
@@ -90,11 +96,11 @@ class ReportShareHelper {
 
     // Rincian Transaksi
     buffer.writeln('RINCIAN TRANSAKSI');
-    buffer.writeln('No,Nomor Invoice,Waktu,Jumlah Item,Total Tagihan,Uang Diterima,Kembalian');
+    buffer.writeln('No,Nomor Invoice,Waktu,Metode Pembayaran,Jumlah Item,Total Tagihan,Uang Diterima,Kembalian');
     for (int i = 0; i < report.transactions.length; i++) {
       final trx = report.transactions[i];
       final timeStr = DateFormat('dd/MM/yyyy HH:mm:ss').format(trx.dateTime);
-      buffer.writeln('${i + 1},"${trx.invoiceNumber}","$timeStr",${trx.items.length},${trx.totalAmount},${trx.cashReceived},${trx.changeAmount}');
+      buffer.writeln('${i + 1},"${trx.invoiceNumber}","$timeStr","${trx.paymentMethod}",${trx.items.length},${trx.totalAmount},${trx.cashReceived},${trx.changeAmount}');
     }
 
     final tempDir = await getTemporaryDirectory();

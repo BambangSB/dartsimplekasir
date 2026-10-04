@@ -34,6 +34,13 @@ class DBHelper {
       )
     ''');
 
+    // Pastikan kolom paymentMethod selalu ada pada tabel transactions
+    try {
+      await db.execute("ALTER TABLE transactions ADD COLUMN paymentMethod TEXT DEFAULT 'Tunai'");
+    } catch (_) {
+      // Kolom sudah ada
+    }
+
     return db;
   }
 
@@ -76,6 +83,7 @@ class DBHelper {
         totalAmount REAL NOT NULL,
         cashReceived REAL NOT NULL,
         changeAmount REAL NOT NULL,
+        paymentMethod TEXT DEFAULT 'Tunai',
         itemsJson TEXT NOT NULL
       )
     ''');

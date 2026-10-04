@@ -137,7 +137,7 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Solusi Kasir & Pembukuan Praktis',
+                        'Solusi Praktis untuk Usaha Anda',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,

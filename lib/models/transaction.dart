@@ -8,6 +8,7 @@ class TransactionModel {
   final double totalAmount;
   final double cashReceived;
   final double changeAmount;
+  final String paymentMethod;
   final List<CartItem> items;
 
   TransactionModel({
@@ -17,6 +18,7 @@ class TransactionModel {
     required this.totalAmount,
     required this.cashReceived,
     required this.changeAmount,
+    this.paymentMethod = 'Tunai',
     required this.items,
   });
 
@@ -28,6 +30,7 @@ class TransactionModel {
       'totalAmount': totalAmount,
       'cashReceived': cashReceived,
       'changeAmount': changeAmount,
+      'paymentMethod': paymentMethod,
       'itemsJson': jsonEncode(items.map((i) => i.toMap()).toList()),
     };
   }
@@ -46,6 +49,7 @@ class TransactionModel {
       totalAmount: (map['totalAmount'] as num).toDouble(),
       cashReceived: (map['cashReceived'] as num).toDouble(),
       changeAmount: (map['changeAmount'] as num).toDouble(),
+      paymentMethod: map['paymentMethod'] as String? ?? 'Tunai',
       items: itemsList,
     );
   }

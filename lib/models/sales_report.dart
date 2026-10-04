@@ -21,6 +21,10 @@ class SalesReport {
   final int totalTransactions;
   final int totalItemsSold;
   final double averageOrderValue;
+  final double cashRevenue;
+  final int cashTransactions;
+  final double qrisRevenue;
+  final int qrisTransactions;
   final List<TopSellingItem> topSellingItems;
   final List<TransactionModel> transactions;
 
@@ -31,6 +35,10 @@ class SalesReport {
     required this.totalTransactions,
     required this.totalItemsSold,
     required this.averageOrderValue,
+    this.cashRevenue = 0.0,
+    this.cashTransactions = 0,
+    this.qrisRevenue = 0.0,
+    this.qrisTransactions = 0,
     required this.topSellingItems,
     required this.transactions,
   });
@@ -51,10 +59,22 @@ class SalesReport {
 
     double revenue = 0.0;
     int itemsCount = 0;
+    double cashRev = 0.0;
+    int cashCount = 0;
+    double qrisRev = 0.0;
+    int qrisCount = 0;
     final Map<String, TopSellingItem> itemStats = {};
 
     for (var trx in filtered) {
       revenue += trx.totalAmount;
+      if (trx.paymentMethod == 'QRIS') {
+        qrisRev += trx.totalAmount;
+        qrisCount++;
+      } else {
+        cashRev += trx.totalAmount;
+        cashCount++;
+      }
+
       for (var cartItem in trx.items) {
         itemsCount += cartItem.quantity;
         final name = cartItem.item.name;
@@ -89,6 +109,10 @@ class SalesReport {
       totalTransactions: filtered.length,
       totalItemsSold: itemsCount,
       averageOrderValue: aov,
+      cashRevenue: cashRev,
+      cashTransactions: cashCount,
+      qrisRevenue: qrisRev,
+      qrisTransactions: qrisCount,
       topSellingItems: topList,
       transactions: filtered,
     );

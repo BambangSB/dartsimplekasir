@@ -106,6 +106,14 @@ class PrinterHelper {
 
     // Ringkasan Pembayaran
     bytes += generator.row([
+      PosColumn(text: 'Metode', width: 6),
+      PosColumn(
+        text: transaction.paymentMethod == 'QRIS' ? 'QRIS' : 'Tunai',
+        width: 6,
+        styles: const PosStyles(align: PosAlign.right),
+      ),
+    ]);
+    bytes += generator.row([
       PosColumn(text: 'Total', width: 6, styles: const PosStyles(bold: true)),
       PosColumn(
         text: CurrencyFormat.toRupiah(transaction.totalAmount),
@@ -113,22 +121,41 @@ class PrinterHelper {
         styles: const PosStyles(align: PosAlign.right, bold: true),
       ),
     ]);
-    bytes += generator.row([
-      PosColumn(text: 'Tunai', width: 6),
-      PosColumn(
-        text: CurrencyFormat.toRupiah(transaction.cashReceived),
-        width: 6,
-        styles: const PosStyles(align: PosAlign.right),
-      ),
-    ]);
-    bytes += generator.row([
-      PosColumn(text: 'Kembali', width: 6),
-      PosColumn(
-        text: CurrencyFormat.toRupiah(transaction.changeAmount),
-        width: 6,
-        styles: const PosStyles(align: PosAlign.right),
-      ),
-    ]);
+    if (transaction.paymentMethod == 'Tunai') {
+      bytes += generator.row([
+        PosColumn(text: 'Tunai', width: 6),
+        PosColumn(
+          text: CurrencyFormat.toRupiah(transaction.cashReceived),
+          width: 6,
+          styles: const PosStyles(align: PosAlign.right),
+        ),
+      ]);
+      bytes += generator.row([
+        PosColumn(text: 'Kembali', width: 6),
+        PosColumn(
+          text: CurrencyFormat.toRupiah(transaction.changeAmount),
+          width: 6,
+          styles: const PosStyles(align: PosAlign.right),
+        ),
+      ]);
+    } else {
+      bytes += generator.row([
+        PosColumn(text: 'Bayar (QRIS)', width: 6),
+        PosColumn(
+          text: CurrencyFormat.toRupiah(transaction.totalAmount),
+          width: 6,
+          styles: const PosStyles(align: PosAlign.right),
+        ),
+      ]);
+      bytes += generator.row([
+        PosColumn(text: 'Status', width: 6),
+        PosColumn(
+          text: 'LUNAS',
+          width: 6,
+          styles: const PosStyles(align: PosAlign.right, bold: true),
+        ),
+      ]);
+    }
     bytes += generator.hr(ch: '=');
 
     // Footer Struk
