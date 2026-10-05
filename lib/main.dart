@@ -24,7 +24,7 @@ class SimpleKasirApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TransactionProvider()..fetchTransactions()),
       ],
       child: MaterialApp(
-        title: 'Kasir UMKM',
+        title: 'KasirKu UMKM',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,

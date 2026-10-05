@@ -10,6 +10,7 @@ import 'add_menu_screen.dart';
 import 'checkout_screen.dart';
 import 'history_screen.dart';
 import 'printer_settings_screen.dart';
+import 'tutorial_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final VoidCallback? onOpenHistory;
@@ -176,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       const Text(
-                        'Simple Kasir UMKM',
+                        'KasirKu UMKM',
                         style: TextStyle(fontSize: 11, color: Colors.white70),
                       ),
                     ],
@@ -222,6 +223,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(builder: (_) => const HistoryScreen()),
                   );
                 },
+          ),
+          IconButton(
+            icon: const Icon(Icons.help_outline),
+            tooltip: 'Panduan Aplikasi',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const TutorialScreen(isHelpMode: true)),
+              );
+            },
           ),
         ],
       ),

@@ -56,7 +56,7 @@ class DBHelper {
     // Default Profil UMKM
     await db.insert('settings', {
       'key': 'store_name',
-      'value': 'KASIR UMKM',
+      'value': 'KasirKu UMKM',
     });
     await db.insert('settings', {
       'key': 'store_address',
@@ -87,32 +87,6 @@ class DBHelper {
         itemsJson TEXT NOT NULL
       )
     ''');
-
-    // Data awal (Seed Data) untuk UMKM
-    await db.insert('menus', {
-      'name': 'Kopi Hitam',
-      'price': 5000.0,
-      'imagePath': null,
-      'category': 'Minuman',
-    });
-    await db.insert('menus', {
-      'name': 'Es Teh Manis',
-      'price': 4000.0,
-      'imagePath': null,
-      'category': 'Minuman',
-    });
-    await db.insert('menus', {
-      'name': 'Nasi Goreng Spesial',
-      'price': 15000.0,
-      'imagePath': null,
-      'category': 'Makanan',
-    });
-    await db.insert('menus', {
-      'name': 'Mie Goreng Telur',
-      'price': 12000.0,
-      'imagePath': null,
-      'category': 'Makanan',
-    });
   }
 
   // --- CRUD Menu ---

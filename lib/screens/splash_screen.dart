@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/settings_provider.dart';
 import 'home_screen.dart';
+import 'tutorial_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -41,11 +44,15 @@ class _SplashScreenState extends State<SplashScreen>
 
     _timer = Timer(const Duration(milliseconds: 2200), () {
       if (mounted) {
+        final settings = Provider.of<SettingsProvider>(context, listen: false);
+        final targetScreen = settings.hasSeenTutorial
+            ? const HomeScreen()
+            : const TutorialScreen();
+
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 600),
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                const HomeScreen(),
+            pageBuilder: (context, animation, secondaryAnimation) => targetScreen,
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return FadeTransition(opacity: animation, child: child);
@@ -127,7 +134,7 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                       const SizedBox(height: 24),
                       const Text(
-                        'Kasir UMKM',
+                        'KasirKu UMKM',
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,

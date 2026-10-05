@@ -46,7 +46,7 @@ class PrinterHelper {
   /// Membuat format bytes struk belanja ESC/POS (standar 58mm kertas thermal)
   Future<List<int>> generateReceiptBytes(
     TransactionModel transaction, {
-    String storeName = 'KASIR UMKM',
+    String storeName = 'KASIRKU UMKM',
     String storeAddress = 'Semoga Usaha Anda Lancar & Berkah',
   }) async {
     final profile = await CapabilityProfile.load();
@@ -184,7 +184,7 @@ class PrinterHelper {
 
     final bytes = await generateReceiptBytes(
       transaction,
-      storeName: storeName ?? 'KASIR UMKM',
+      storeName: storeName ?? 'KASIRKU UMKM',
       storeAddress: storeAddress ?? 'Semoga Usaha Anda Lancar & Berkah',
     );
     final result = await PrintBluetoothThermal.writeBytes(bytes);
