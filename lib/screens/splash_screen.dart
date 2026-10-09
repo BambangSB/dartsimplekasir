@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../providers/menu_provider.dart';
 import '../providers/settings_provider.dart';
 import 'home_screen.dart';
 import 'tutorial_screen.dart';
@@ -42,10 +43,24 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    _timer = Timer(const Duration(milliseconds: 2200), () {
+    _timer = Timer(const Duration(milliseconds: 2200), () async {
       if (mounted) {
         final settings = Provider.of<SettingsProvider>(context, listen: false);
-        final targetScreen = settings.hasSeenTutorial
+        final menuProvider = Provider.of<MenuProvider>(context, listen: false);
+
+        // Pastikan settings dan menu sudah selesai dimuat dari SQLite
+        if (settings.isLoading) {
+          await settings.loadSettings();
+        }
+        if (menuProvider.isLoading) {
+          await menuProvider.fetchMenus();
+        }
+
+        if (!mounted) return;
+
+        // Panduan hanya tampil jika BELUM pernah dilihat DAN produk masih kosong (belum ada data)
+        final hasMenus = menuProvider.menus.isNotEmpty;
+        final targetScreen = (settings.hasSeenTutorial || hasMenus)
             ? const HomeScreen()
             : const TutorialScreen();
 

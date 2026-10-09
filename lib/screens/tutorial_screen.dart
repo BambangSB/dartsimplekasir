@@ -106,6 +106,18 @@ class _TutorialScreenState extends State<TutorialScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    if (!widget.isHelpMode) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          Provider.of<SettingsProvider>(context, listen: false).completeTutorial();
+        }
+      });
+    }
+  }
+
+  @override
   void dispose() {
     _pageController.dispose();
     super.dispose();

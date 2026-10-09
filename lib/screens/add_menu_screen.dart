@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import '../models/menu_item.dart';
 import '../providers/menu_provider.dart';
+import '../providers/settings_provider.dart';
 
 class AddMenuScreen extends StatefulWidget {
   final MenuItem? menuToEdit;
@@ -136,6 +137,9 @@ class _AddMenuScreenState extends State<AddMenuScreen> {
           imagePath: _imagePath,
         );
         await menuProvider.addMenu(newMenu);
+        if (mounted) {
+          await Provider.of<SettingsProvider>(context, listen: false).completeTutorial();
+        }
       } else {
         final updatedMenu = widget.menuToEdit!.copyWith(
           name: name,
